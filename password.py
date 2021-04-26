@@ -1,32 +1,23 @@
-from random import shuffle
+import string
+import secrets
 
 class Password:
-    __uppers = []
-    __lowers = []
-    __numbers = []
-    __specials = []
-    __length = 0
-    __charset = []
 
     def __init__(self):
-        self.__uppers = [chr(i) for i in range(ord("A"), ord("Z"))]
-        self.__lowers = [chr(i) for i in range(ord("a"), ord("z"))]
-        self.__numbers = [str(i) for i in range(10)]
-        self.__specials = list("!#$%&/()=?+*[];:_,.-{}")
+        self.__uppers = string.ascii_uppercase
+        self.__lowers = string.ascii_lowercase
+        self.__numbers = string.digits
+        self.__specials = string.punctuation
         self.__length = 16
+        self.__charset = ''
 
     def __str__(self):
         return self.generate()
 
     def set_charset(self):
         self.__charset = self.__uppers + self.__lowers + self.__numbers + self.__specials
-        if len(self.__charset) < self.__length:
-            try:
-                mult = self.__length / len(self.__charset)
-                self.__charset *= int(mult) + 1
-            except ZeroDivisionError:
-                print("Error: Your charset is empty")
-        shuffle(self.__charset)
+        if len(self.__charset) == 0:
+            raise Exception("Error: Your charset is empty")
 
     def set_length(self, length):
         length = int(length) if length.isnumeric() else 16
@@ -37,18 +28,24 @@ class Password:
         self.__length = length
 
     def set_uppers(self, uppers):
-        self.__uppers = [str(i) for i in uppers]
+        self.__uppers = uppers
 
     def set_lowers(self, lowers):
-        self.__lowers = [str(i) for i in lowers]
+        self.__lowers = lowers
 
     def set_numbers(self, numbers):
-        self.__numbers = [str(i) for i in numbers]
+        self.__numbers = numbers
 
     def set_specials(self, specials):
-        self.__specials = [str(i) for i in specials]
+        self.__specials = specials
 
     def generate(self):
         self.set_charset()
-        return ''.join(self.__charset[:self.__length])
+        return ''.join(secrets.choice(self.__charset) for i in range(self.__length))
+        
+    def generate_passphrase(self, length):
+        with open('/usr/share/dict/words') as f:
+            words = [word.strip() for word in f]
+        return ' '.join(secrets.choice(words) for i in range(length))
+
 

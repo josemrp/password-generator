@@ -23,24 +23,27 @@ def main():
             "Default configuration", 
             "Only lower letters",
             "Lower letters and numbers",
-            "Custom configuration"            
+            "Custom configuration",
+            "Four random common words"            
             ]
     action = Menu.generate(options)
 
     if action == "1":
-        pass
+        print(password.generate())
     if action == "2":    
         password.set_uppers("")
         password.set_numbers("")
         password.set_specials("")
+        print(password.generate())
     if action == "3":    
         password.set_uppers("")
         password.set_specials("")
+        print(password.generate())
     if action == "4":
         custom_password()
-    
-    if action >= "1" and action <= "4":
-        print(password)
+        print(password.generate())  
+    if action == "5":
+        print(password.generate_passphrase(4))
 
 if __name__ == "__main__":
     main()
